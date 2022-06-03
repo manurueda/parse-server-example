@@ -49,6 +49,12 @@ app.get('/test', function (req, res) {
   res.sendFile(path.join(__dirname, '/public/test.html'));
 });
 
+app.post('/mux', async function (req, res) {
+  const { type: eventType, data: eventData } = await json(req);
+  Parse.Cloud.run('webhook', { eventType: eventType, eventData: eventData }, {});
+  res.status(200).send('Thanks, Mux!');
+});
+
 const port = process.env.PORT || 1337;
 if (!test) {
   const httpServer = require('http').createServer(app);
